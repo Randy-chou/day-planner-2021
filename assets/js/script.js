@@ -45,7 +45,7 @@ function displayPlanner(){
 // Event delegation to store the content of the corresponding timeblock to local storage when a button is pressed
 function updateStorage(event){
     var target = $(event.target)
-    if(target.is("button") || target.attr("class") == "i"){
+    if(target.is("button") || target.is("i")){
         var blockIndex = target.closest(".time-block").attr("id").substr(-1);
         storageArray[blockIndex] = target.closest(".time-block").children(".description").val();
         localStorage.setItem("storageArray", JSON.stringify(storageArray));
@@ -56,7 +56,7 @@ $("#planner").on("click", updateStorage);
 
 //Update the label of the current day every half-second interval
 function setTime(){
-    $("#currentDay").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
+    $("#currentDay").text(moment().format('dddd, MMMM Do'));
 }
 setInterval(setTime,500);
 
