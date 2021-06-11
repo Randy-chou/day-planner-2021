@@ -1,24 +1,30 @@
+// Array to store events added to the page
 var storageArray = ["","","","","","","","",""];
 
+// Check if there are events stored locally
 if(localStorage.getItem("storageArray") != null){
     storageArray = JSON.parse(localStorage.getItem("storageArray"));
 }
 
+// Called to update the timeblock colors based the current time as well as update the timeblock textareas to match what is saved in local storage.
 function displayPlanner(){
     var planner = $("#planner");
     var currentHour = moment().format('h a');
-    console.log(currentHour);
+
+    //Loops through each entry in localstorage that corresponds to a timeblock
     $(storageArray).each(function(index){
+        //Get the timeblock associated with the index in storage
         var currentZone = $(planner.children().eq(index).children(".description"));
+
+        //Get the hour of the timeblock
         var zoneTime = planner.children().eq(index).children().first().children().text();
-        console.log(zoneTime);
+
+        //Update the content of the timeblock to what is stored
         currentZone.val(this);
+
+        //Update the color of the timeblock relative to the current hour
         var currentArray = currentHour.split(" ");
         var zoneArray = zoneTime.split(" ");
-        
-        console.log(currentArray);
-        console.log(zoneArray);
-
         if(currentArray[1] == zoneArray[1]){
             if(Number(currentArray[0])%12 > Number(zoneArray[0])%12){
                 currentZone.addClass("past");
@@ -36,6 +42,7 @@ function displayPlanner(){
     })
 }
 
+// Event delegation to store the content of the corresponding timeblock to local storage when a button is pressed
 function updateStorage(event){
     var target = $(event.target)
     if(target.is("button") || target.attr("class") == "i"){
@@ -47,12 +54,10 @@ function updateStorage(event){
 
 $("#planner").on("click", updateStorage);
 
+//Update the label of the current day every half-second interval
 function setTime(){
     $("#currentDay").text(moment().format('MMMM Do YYYY, h:mm:ss a'));
 }
-
 setInterval(setTime,500);
 
 displayPlanner();
-
-console.log(12%12);
